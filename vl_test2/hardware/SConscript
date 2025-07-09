@@ -1,0 +1,39 @@
+import os
+from building import *
+
+cwd = GetCurrentDir()
+src  = Glob('*.c')
+# add hardware drivers
+src = Split('''
+VL53L0X/bsp_VL53L0X.c
+VL53L0X/vl53l0x_cali.c
+VL53L0X/vl53l0x_gen.c
+VL53L0X/vl53l0x_it.c
+VL53L0X/core/src/vl53l0x_api_calibration.c
+VL53L0X/core/src/vl53l0x_api_core.c
+VL53L0X/core/src/vl53l0x_api.c
+VL53L0X/core/src/vl53l0x_api_ranging.c
+VL53L0X/core/src/vl53l0x_api_strings.c
+VL53L0X/platform/src/vl53l0x_i2c.c
+VL53L0X/platform/src/vl53l0x_platform.c
+WT61C/usart2.c
+WT61C/wit_c_sdk.c
+WT61C/wt61c_bsp.c
+WS2821T/bsp_ws2812.c
+syn6288/syn6288.c
+syn6288/syn6288_uart.c
+''')
+
+path = [
+    cwd,
+    cwd + '/VL53L0X/core/inc',    # Add core headers path
+    cwd + '/VL53L0X/platform/inc', # Add platform headers path
+    cwd + '/VL53L0X'  ,            # Add local VL53L0X headers path
+    cwd + '/WT61C',
+    cwd + '/WS2821T',
+    cwd + '/syn6288'
+]
+
+group = DefineGroup('hardware', src, depend = [''], CPPPATH = path)
+
+Return('group')
